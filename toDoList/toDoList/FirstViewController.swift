@@ -14,7 +14,7 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if list.isEmpty {
+        if list.count == 0 {
             return 1
         } else {
             return list.count
@@ -25,7 +25,11 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "item")
         
-        cell.textLabel?.text = list[indexPath.row]
+        if list.count > 0 {
+            cell.textLabel?.text = list[indexPath.row]
+        } else {
+            cell.textLabel?.text = "Try Adding things to your list"
+        }
         
         return cell
     }

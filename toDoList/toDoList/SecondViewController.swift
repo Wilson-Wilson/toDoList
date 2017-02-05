@@ -13,7 +13,7 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var itemField: UITextField!
     @IBOutlet weak var messageLabel: UILabel!
     
-    var array = [String]()
+    var array = NSMutableArray()
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -28,14 +28,16 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
     @IBAction func addButton(_ sender: Any) {
         
         if let item = itemField.text {
-            array.append(item)
+            array.add(item)
             
             UserDefaults.standard.set(array, forKey: "list")
             
             messageLabel.text = ""
             
+            itemField.placeholder = "Eg.Be Awesome!!"
+            
         } else {
-            messageLabel.text = "Please enter an item before pressing add"
+            messageLabel.text = "Please enter an item"
         }
         
     }
@@ -46,7 +48,7 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         let listObject = UserDefaults.standard.object(forKey: "list")
         
-        if let list = listObject as? [String] {
+        if let list = listObject as? NSMutableArray {
             array = list
         } else {
             UserDefaults.standard.set(array, forKey: "list")
