@@ -13,8 +13,6 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var itemField: UITextField!
     @IBOutlet weak var messageLabel: UILabel!
     
-    var array = NSMutableArray()
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -27,32 +25,33 @@ class SecondViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func addButton(_ sender: Any) {
         
-        if let item = itemField.text {
-            array.add(item)
+        var items:[String] = []
+        
+        let itemObject = UserDefaults.standard.object(forKey: "list")
+        
+        if  itemField.text != "" {
             
-            UserDefaults.standard.set(array, forKey: "list")
+            if let tempItems = itemObject as? [String] {
+                
+                items = tempItems
+                items.append(itemField.text!)
+                UserDefaults.standard.set(items, forKey: "list")
+            } else {
+                
+                items = [itemField.text!]
+                UserDefaults.standard.set(items, forKey: "list")
+            }
             
-            messageLabel.text = ""
-            
-            itemField.placeholder = "Eg.Be Awesome!!"
-            
-        } else {
             messageLabel.text = "Please enter an item"
         }
         
+        itemField.text = ""
     }
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let listObject = UserDefaults.standard.object(forKey: "list")
-        
-        if let list = listObject as? NSMutableArray {
-            array = list
-        } else {
-            UserDefaults.standard.set(array, forKey: "list")
-        }
     }
 
     override func didReceiveMemoryWarning() {

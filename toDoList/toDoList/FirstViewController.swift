@@ -10,26 +10,18 @@ import UIKit
 
 class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var list = [String]()
+    @IBOutlet weak var table: UITableView!
+    var items:[String] = []
     
     internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if list.count == 0 {
-            return 1
-        } else {
-            return list.count
-        }
+        return items.count
     }
     
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "item")
         
-        if list.count > 0 {
-            cell.textLabel?.text = list[indexPath.row]
-        } else {
-            cell.textLabel?.text = "Try Adding things to your list"
-        }
+        cell.textLabel?.text = items[indexPath.row]
         
         return cell
     }
@@ -37,9 +29,28 @@ class FirstViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let arrayObject = UserDefaults.standard.object(forKey: "list")
-        if let initList = arrayObject as? [String] {
-            list = initList
+     
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        let itemObject = UserDefaults.standard.object(forKey: "list")
+        
+        if let tempItems = itemObject as? [String] {
+            
+            items = tempItems
+            
+        }
+        
+        table.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            items.remove(at: indexPath.row)
+            table.reloadData()
+            UserDefaults.standard.set(items, forKey: "list")
+            
         }
     }
 
